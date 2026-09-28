@@ -1,37 +1,41 @@
 # Notch Pocket Homebrew tap
 
 Owned distribution repository for [Notch Pocket](https://github.com/jdylanmc/notch).
-**No installable cask is published yet.** This repository prepares the review and
-verification gates for the first notarized release; it does not distribute an
-unsigned placeholder or the upstream application.
-
-After the notarized `notch-pocket-v0.1.0` release is published and its cask PR
-passes review and CI, the intended installation command is:
+The **0.1.0** cask uses the Developer ID-signed, notarized and stapled
+[Notch Pocket release](https://github.com/jdylanmc/notch/releases/tag/notch-pocket-v0.1.0),
+not the upstream application.
 
 ```bash
 brew install --cask jdylanmc/notch/notch-pocket
 ```
 
-The cask will point only to the owned release's `notch-pocket-0.1.0.dmg`, with
+The cask points only to the owned release's `notch-pocket-0.1.0.dmg`, with
 the SHA-256 of its final signed, notarized and stapled bytes. It installs
 `notch-pocket.app` on macOS Sonoma (14) or later. No quarantine removal,
 Gatekeeper bypass, automatic app launch or user-data removal belongs in the cask.
 
 ## Update and acceptance workflow
 
-The planned application release workflow will open a cask-update PR in this repository.
+The application release workflow opens a cask-update PR in this repository.
+Publish only product-qualified Notch Pocket tags; inherited upstream tags are
+not release inputs for this tap.
 Review the version, product-qualified tag, asset URL and final checksum. CI
 checks the exact reviewed cask shape, downloads and hashes the public DMG, and
 runs Homebrew's strict online cask audit before the PR is merged. A checksum
 proves artifact identity, not notarization by itself; native signing, ticket and
 Gatekeeper evidence belongs to the corresponding application release.
 
+CI registers the exact checkout as a temporary tap on its ephemeral runner,
+verifies the cloned commit and cask contents match, then audits
+`jdylanmc/notch/notch-pocket` by name. File-path audit syntax is no longer
+supported by Homebrew. The launcher refuses pre-existing taps and local
+execution; it never installs or launches the application.
+
 The initial infrastructure PR has no cask, so download/audit steps explicitly
 skip and report bootstrap status. Recursive policy checks reject other Ruby
 definitions, including nested casks and formulae; a published cask cannot be
 removed to regain bootstrap status. Once a cask exists those gates run on every
 PR and main-branch push. No synthetic checksum is committed as a product cask.
-Native Homebrew audit remains unproven until that first real cask PR.
 
 The repository owner is `@jdylanmc`. Review infrastructure changes as well as
 cask content: PRs run their proposed workflow and tests, so a green check is
