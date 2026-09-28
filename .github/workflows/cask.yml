@@ -43,7 +43,7 @@ jobs:
         if: hashFiles('Casks/notch-pocket.rb') != ''
         env:
           HOMEBREW_GITHUB_API_TOKEN: ${{ github.token }}
-        run: brew audit --cask --strict --online "$PWD/Casks/notch-pocket.rb"
+        run: bash scripts/audit_cask.sh
       - name: Report bootstrap state
         if: hashFiles('Casks/notch-pocket.rb') == ''
         run: echo "Tap infrastructure only. No cask or installable release has been published."
